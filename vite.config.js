@@ -21,9 +21,6 @@ export default defineConfig({
   build: {
     rollupOptions: {
       output: {
-        manualChunks: {
-          i18n: ['i18next', 'react-i18next']
-        }
       }
     }
   }
