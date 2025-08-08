@@ -2,7 +2,7 @@ import axios from 'axios';
 import bcrypt from 'bcryptjs';
 import { sendResetPasswordEmail } from '../utils/email/emailjsService';
 
-const API_URL = 'http://localhost:3000';
+const API_URL = '/api';
 
 // Generate secure token
 const generateToken = () => {
