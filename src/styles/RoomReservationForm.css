@@ -1,0 +1,82 @@
+.reservation-form-container {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+.reservation-form-card {
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.form-title {
+  text-align: center;
+  color: #1890ff;
+  font-weight: 600;
+  margin-bottom: 0;
+  font-size: clamp(1.25rem, 3vw + 0.6rem, 1.75rem);
+}
+
+.form-label {
+  font-weight: 500;
+}
+
+.hotel-select {
+  border-radius: 6px;
+}
+
+.hotel-option {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.hotel-name {
+  font-weight: 500;
+}
+
+.price-tag {
+  font-weight: 500;
+}
+
+.date-range-picker {
+  border-radius: 6px;
+  width: 100%;
+}
+
+.guest-input {
+  width: 100%;
+  border-radius: 6px;
+}
+
+.notes-textarea {
+  border-radius: 6px;
+  resize: none;
+}
+
+.submit-button {
+  border-radius: 6px;
+  height: 45px;
+  font-size: 16px;
+  font-weight: 500;
+  width: 100%;
+}
+
+.persian-date-picker {
+  direction: rtl !important;
+  font-family: 'Vazir', 'Tanha', sans-serif !important;
+}
+
+.ant-picker-panel {
+  direction: rtl;
+  font-family: 'Vazir', 'Tanha', sans-serif !important;
+}
+
+.ant-picker-input input {
+  font-family: 'Vazir', 'Tanha', sans-serif !important;
+  text-align: right !important;
+}
+
+.ant-picker-dropdown {
+  font-family: 'Vazir', 'Tanha', sans-serif !important;
+}

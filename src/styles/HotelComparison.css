@@ -1,0 +1,128 @@
+.hotel-comparison-card {
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  }
+  
+  .header-title {
+    font-size: clamp(1.1rem, 2vw + 0.5rem, 1.25rem);
+    font-weight: 600;
+  }
+  
+  .header-icon {
+    color: #1890ff;
+  }
+  
+  .hotel-selector-row {
+    margin-bottom: 24px;
+  }
+  
+  .hotel-selector-card {
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+  }
+  
+  .card-title {
+    font-weight: 500;
+  }
+  
+  .hotel-select-input {
+    border-radius: 6px;
+  }
+  
+  .hotel-option {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  
+  .hotel-rating {
+    font-size: 14px;
+  }
+  
+  .comparison-table-container {
+    margin-top: 16px;
+    overflow-x: auto; 
+  }
+  
+  .comparison-table {
+    border-radius: 8px;
+    overflow: hidden;
+    min-width: 700px;
+  }
+  
+  .comparison-row:hover {
+    background-color: #fafafa;
+  }
+  
+  .feature-title {
+    font-weight: 500;
+  }
+  
+  .hotel-header {
+    padding: 8px 0;
+  }
+  
+  .hotel-title {
+    font-size: clamp(0.9rem, 1.5vw + 0.5rem, 1.1rem); 
+  }
+  
+  .hotel-name {
+    font-weight: 500;
+  }
+  
+  .hotel-rate {
+    color: #faad14;
+  }
+  
+  .price-stat {
+    text-align: center;
+  }
+  
+  .book-button {
+    border-radius: 6px;
+    font-weight: 500;
+  }
+  
+  .remove-button {
+    color: #ff4d4f;
+    border-color: #ff4d4f;
+  }
+  
+  .empty-state {
+    margin: 40px 0;
+  }
+  
+  .empty-message {
+    color: rgba(0, 0, 0, 0.45);
+  }
+  
+  .booking-modal {
+    border-radius: 8px;
+  }
+  
+  .modal-title {
+    font-weight: 500;
+  }
+  
+  .form-label {
+    font-weight: 500;
+  }
+  
+  .hotel-select {
+    border-radius: 6px;
+  }
+  
+  .date-picker {
+    border-radius: 6px;
+  }
+  
+  .guest-select {
+    width: 100%;
+    border-radius: 6px;
+  }
+  
+  .submit-button {
+    border-radius: 6px;
+    height: 40px;
+    font-weight: 500;
+  }

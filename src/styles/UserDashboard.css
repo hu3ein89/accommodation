@@ -1,0 +1,119 @@
+/* Main Layout */
+.user-dashboard-container {
+  min-height: 100vh;
+  background-color: #f5f7fa;
+  margin-top: 82px;
+}
+
+.site-layout {
+  transition: all 0.2s;
+}
+
+/* --- Sider (Sidebar) --- */
+.dashboard-sider {
+  box-shadow: 2px 0 8px 0 rgba(0, 0, 0, 0.05);
+  background: #fff !important;
+  transition: all 0.2s;
+  border-left: 1px solid #f0f0f0;
+}
+
+.user-profile-header {
+  text-align: center;
+  background: linear-gradient(135deg, #1890ff 0%, #096dd9 100%);
+}
+
+.user-avatar {
+  border: 2px solid rgb(150, 110, 110);
+  background-color: rgb(147, 57, 57);
+}
+
+.user-name-title {
+  color: #fff !important;
+  margin-bottom: 2px !important;
+  font-size: clamp(1.1rem, 1.5vw + 0.5rem, 1.25rem) !important;
+}
+
+.user-email-text {
+  color: rgba(255, 255, 255, 0.8) !important;
+}
+
+.dashboard-menu {
+  border-right: 0 !important;
+  padding-top: 16px;
+}
+
+.dashboard-menu .ant-menu-item {
+  margin: 4px 12px !important;
+  width: calc(100% - 24px) !important;
+  border-radius: 8px !important;
+}
+
+.menu-item-label {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.last-login-info {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  padding: 16px;
+  text-align: center;
+  border-top: 1px solid #f0f0f0;
+}
+
+/* --- Header --- */
+.dashboard-header {
+  background: #fff !important;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.1);
+  z-index: 10;
+  padding: 0 24px !important;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.header-title-container .ant-typography {
+    font-size: clamp(1.1rem, 2vw + 0.5rem, 1.35rem) !important;
+}
+
+/* --- Content --- */
+.dashboard-content {
+  padding: 24px;
+  margin: 0;
+  min-height: auto;
+}
+
+.stats-card {
+  margin-bottom: 24px;
+  border-radius: 8px;
+}
+
+.suspense-loader {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: calc(100vh - 250px);
+}
+
+/* --- Responsive Styles --- */
+@media (max-width: 576px) {
+  .dashboard-header {
+    padding: 0 16px !important;
+  }
+  .dashboard-content {
+    padding: 16px;
+  }
+  .home-button-text {
+    display: none;
+  }
+  .stats-space {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  .stats-space .ant-divider {
+    display: none;
+  }
+}

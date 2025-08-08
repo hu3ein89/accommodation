@@ -1,0 +1,103 @@
+.reservation-list-container {
+  padding: 0;
+}
+
+.loading-container,
+.empty-state {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 300px;
+}
+
+.empty-message {
+  font-size: 16px;
+  color: #888;
+}
+
+.reservation-card {
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
+  transition: all 0.3s ease;
+}
+
+
+.reservation-card .ant-card-body {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.card-header {
+  padding: 12px 20px;
+  border-bottom: 1px solid #f0f0f0;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+
+.card-body {
+  padding: 20px;
+  flex-grow: 1;
+}
+
+
+.card-footer {
+  padding: 12px 20px; 
+  border-top: 1px solid #f0f0f0;
+  display: flex;
+  justify-content: flex-end; 
+  flex-shrink: 0;
+}
+
+.reservation-id {
+  font-size: 12px;
+  font-family: monospace;
+}
+
+.hotel-info-section {
+  margin-bottom: 16px;
+}
+
+.hotel-name {
+  color: #333 !important;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 8px !important;
+}
+
+.guest-info {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 13px;
+}
+
+.card-divider {
+  margin: 0 0 20px 0;
+}
+
+.details-section .info-item {
+  display: flex;
+  flex-direction: column;
+}
+
+.info-item .ant-typography-secondary {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 12px;
+  margin-bottom: 4px;
+}
+
+.info-item .ant-typography-strong {
+  font-size: 14px;
+  color: #333;
+}
+
+.total-price-item .total-price-value {
+  color: #1890ff;
+  font-size: 16px;
+}

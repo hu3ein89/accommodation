@@ -1,0 +1,110 @@
+.header {
+  transition: background 0.3s ease, box-shadow 0.3s ease;
+  z-index: 1001;
+}
+
+.header.scrolled {
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.logo {
+  padding: 10px 0;
+  flex-shrink: 0 !important; 
+  min-width: 80px;
+}
+
+/* Admin Tab Responsiveness */
+.ant-menu-item.admin-tab {
+  padding: 0 8px !important;
+}
+.ant-menu-item.admin-tab .ant-menu-title-content {
+  font-size: 12px;
+}
+
+/* Menu Items */
+.menu {
+  border-bottom: none;
+}
+.menu .ant-menu-item {
+  padding: 0 10px !important;
+}
+.menu .ant-menu-item a,
+.menu .ant-menu-item span,
+.menu .ant-menu-item .anticon {
+  transition: color 0.3s ease;
+  color: #6297c8;
+}
+
+/* Auth Section */
+.auth-buttons {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.user-profile {
+  display: flex;
+  align-items: center;
+  padding: 0 8px;
+}
+.notification-badge .ant-badge-count {
+  background: #1890ff;
+}
+
+/* Mobile Styles */
+@media (max-width: 768px) {
+  .ant-menu-item {
+    padding: 0 6px !important;
+  }
+  
+  .ant-menu-item.admin-tab .ant-menu-title-content {
+    display: none;
+  }
+  .ant-menu-item.admin-tab .anticon {
+    margin-right: 0 !important;
+  }
+
+  /* Hide non-essential elements */
+  .menu {
+    display: none;
+  }
+  .user-profile .username {
+    display: none;
+  }
+  
+  /* Mobile drawer adjustments */
+  .mobile-bell-button {
+    padding: 0 8px !important;
+    font-size: 18px !important;
+  }
+  .ant-badge-count {
+    min-width: 18px !important;
+    height: 18px !important;
+    line-height: 18px !important;
+  }
+}
+
+/* Desktop-Only Elements */
+@media (min-width: 769px) {
+  .ant-btn-icon-only {
+    display: none;
+  }
+  .admin-tab .ant-menu-title-content {
+    display: inline !important;
+  }
+}
+
+/* Drawer Styles */
+.ant-drawer-header {
+  background: #f0f2f5;
+}
+.ant-drawer-title {
+  font-weight: bold;
+}
+.ant-drawer-body {
+  padding: 0;
+}
+.ant-menu-inline, 
+.ant-menu-vertical, 
+.ant-menu-vertical-left {
+  border-right: 0 !important;
+}

@@ -1,0 +1,18 @@
+.custom-quicklink-button {
+    display: block !important;
+    background: transparent !important;
+    border: none !important;
+    box-shadow: none !important;
+    text-align: right !important;
+    padding: 0 !important;
+    margin: 0 !important;
+
+  }
+  
+  .custom-quicklink-button:hover {
+    color: #1890ff !important;
+    background: transparent !important;
+  }
+  body {
+    font-family: 'Vazir';
+  }
