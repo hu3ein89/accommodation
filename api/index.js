@@ -1,6 +1,6 @@
 import express from 'express';
+import jsonServer from 'json-server';
 import path from 'path';
-import jsonServer from '../src/api/jsonServer';
 
 const server = express();
 const router = jsonServer.router(path.join(__dirname, 'db.json'));
