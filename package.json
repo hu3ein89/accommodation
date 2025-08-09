@@ -29,7 +29,7 @@
     "dayjs": "^1.11.13",
     "express": "^5.1.0",
     "jalaliday": "^2.3.0",
-    "json-server": "^1.0.0-beta.3",
+    "json-server": "^0.17.4",
     "lodash": "^4.17.21",
     "nodemon": "^3.1.10",
     "react": "19.1.0",
