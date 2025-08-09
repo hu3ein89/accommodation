@@ -1,19 +1,27 @@
 import express from 'express';
 import cors from 'cors';
-import jsonServer from 'json-server';
+import { create, router as jsonServerRouter } from 'json-server';
+import data from '../db.json';
 import path from 'path';
 
-const server = express();
-const router = jsonServer.router(path.join(process.cwd(), 'db.json'));
+// Create the Vercel serverless function
+const server = create();
+
+// Create a router from your db.json file
+const router = jsonServerRouter(data);
+
+// Set up middlewares
 const middlewares = jsonServer.defaults();
 
+// Use CORS and default middlewares
 server.use(cors());
 server.use(middlewares);
+
+// Use the router for all API endpoints
 server.use('/api', router);
 
-// Fallback to serve the single-page application for all non-API requests
-server.get('*', (req, res) => {
-  res.sendFile(path.join(process.cwd(), 'dist', 'index.html'));
-});
+// This is a crucial line for Vercel. It redirects all non-API requests
+// to your frontend's index.html file.
+server.use(express.static(path.join(process.cwd(), 'dist')));
 
 export default server;
