@@ -80,3 +80,9 @@
 .ant-picker-dropdown {
   font-family: 'Vazir', 'Tanha', sans-serif !important;
 }
+
+@media (max-width: 767px) {
+  .ant-picker-panels {
+    flex-direction: column;
+  }
+}
