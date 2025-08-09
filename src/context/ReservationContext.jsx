@@ -11,7 +11,7 @@ export const ReservationProvider = ({ children }) => {
   // Fetch pending reservations from JSON Server
   const fetchPendingReservations = async () => {
     try {
-      const response = await fetch('http://localhost:3000/reservations?status=pending');
+      const response = await fetch('/api/reservations?status=pending');
       const data = await response.json();
       return data.length;
     } catch (error) {
