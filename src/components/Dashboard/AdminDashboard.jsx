@@ -97,7 +97,6 @@ const AdminDashboard = () => {
     const interval = setInterval(() => {
       queryClient.invalidateQueries(['reservations']);
     }, 3600000); 
-  
     return () => clearInterval(interval);
   }, []);
 
