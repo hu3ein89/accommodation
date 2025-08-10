@@ -125,10 +125,11 @@ const SearchCapsule = ({ variant = 'hero' }) => {
           background: isNavbarVariant ? 'transparent' : 'white',
           borderRadius: '24px',
           boxShadow: isNavbarVariant ? 'none' : '0 4px 20px rgba(0,0,0,0.2)',
+          opacity:'0.8'
         }}
       >
         {!isNavbarVariant && (
-          <div style={{ textAlign: 'center', marginBottom: 'clamp(16px, 2vw, 24px)', fontSize: 'clamp(16px, 2vw, 18px)', fontWeight: '500' }}>
+          <div style={{ textAlign: 'center', marginBottom: 'clamp(16px, 2vw, 24px)', fontSize: 'clamp(16px, 2vw, 18px)', fontWeight: '500'}}>
             {isAuthenticated ? 'یک اقامتگاه رزرو کنید' : 'مقصد سفر کجاست؟'}
           </div>
         )}

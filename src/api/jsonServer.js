@@ -49,7 +49,7 @@ export const fetchUsers = async () => {
 export const createUser = async (userData) => {
   try {
     const emailCheckResponse = await axios.get(`${API_URL}/users?email=${userData.email}`);
-    if (emailCheckResponse.data.length > 0) {
+    if (emailCheckResponse.data.toLowerCase().length > 0) {
       throw new Error('EXISTED EMAIL')
     }
     const { confirmPassword, ...userWithoutConfirm } = userData;
