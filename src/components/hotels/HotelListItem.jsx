@@ -48,7 +48,7 @@ const PriceTag = styled.div`
 `;
 
 const HotelListItem = ({ hotel, onViewDetails }) => {
-  const { name, location, rating, price, image, description, facilities = [] } = hotel;
+  const { name, city, rating, price, image, description, facilities = [] } = hotel;
 
   return (
     <StyledListItem hoverable onClick={() => onViewDetails(hotel.id)}>
@@ -63,7 +63,7 @@ const HotelListItem = ({ hotel, onViewDetails }) => {
           <Title level={4} style={{ margin: 0, marginBottom: '8px' }}>{name}</Title>
           <Space size="small" style={{ marginBottom: '12px' }}>
             <EnvironmentOutlined style={{ color: '#888' }} />
-            <Text type="secondary">{`${location?.city}`}</Text>
+            <Text type="secondary">{city}</Text>
           </Space>
           <Rate disabled defaultValue={rating} allowHalf style={{ display: 'block', marginBottom: '16px' }} />
           <Paragraph type="secondary" ellipsis={{ rows: 2 }}>
