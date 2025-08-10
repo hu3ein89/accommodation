@@ -1,7 +1,7 @@
 import React, { useState, useMemo } from 'react';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { fetchAllTransactions, approveRefund } from '../../api/jsonServer';
-import { Card, Tag, Button, Typography, Spin, Row, Col, Segmented, notification, Table, Statistic, Input, Select, Space, Popconfirm, Empty, ConfigProvider, Grid } from 'antd';
+import { Card, Tag, Button, Typography, Spin, Row, Col, Segmented, notification,Tooltip, Table, Statistic, Input, Select, Space, Popconfirm, Empty, ConfigProvider, Grid } from 'antd';
 import { DatePicker as DatePickerJalali, JalaliLocaleListener } from 'antd-jalali';
 import fa_IR from 'antd/locale/fa_IR';
 import { ArrowDownOutlined, ArrowUpOutlined, SyncOutlined, CheckCircleOutlined, SearchOutlined, FilterOutlined, DownloadOutlined, DollarOutlined, RedoOutlined, ReloadOutlined } from '@ant-design/icons';
@@ -49,21 +49,20 @@ const STATUS_COLORS = {
 
 const TransactionCard = ({ transaction, onApproveRefund, isLoading }) => {
   const typeConfig = TRANSACTION_TYPES[transaction.type] || TRANSACTION_TYPES.default;
-  
   return (
     <Card 
       size="small" 
       style={{ marginBottom: 16 }}
       title={
-        <Space>
-          <Tag color={typeConfig.color} icon={typeConfig.icon}>
-            {typeConfig.text}
-          </Tag>
+        <Space style={{display:'flex',flex:'wrap'}}>
+          <Tooltip title={typeConfig.text}>
+            <Tag color={typeConfig.color} icon={typeConfig.icon} />
+        </Tooltip>
           <Text strong>{transaction.amount.toLocaleString('fa-IR')} تومان</Text>
         </Space>
       }
       extra={
-        <Tag color={STATUS_COLORS[transaction.status] || 'default'}>
+        <Tag color={STATUS_COLORS[transaction.status] || 'default'} style={{fontSize:'10px'}}>
           {transaction.status === 'pending' ? 'در انتظار' :
             transaction.status === 'completed' ? 'تکمیل شده' :
               transaction.status === 'failed' ? 'ناموفق' :
@@ -441,7 +440,7 @@ const ManageTransactions = () => {
         {/* Summary Cards */}
         <Row gutter={16} style={{ marginBottom: 24 }}>
           <Col xs={24} sm={12} md={6}>
-            <Card>
+            <Card style={{height:'100%'}}>
               <Statistic
                 title="مجموع درآمدها"
                 value={financialSummary.totalIncome}
@@ -454,7 +453,7 @@ const ManageTransactions = () => {
             </Card>
           </Col>
           <Col xs={24} sm={12} md={6}>
-            <Card>
+            <Card style={{height:'100%'}}>
               <Statistic
                 title="مجموع بازپرداخت‌ها"
                 value={financialSummary.totalRefunds}
@@ -467,7 +466,7 @@ const ManageTransactions = () => {
             </Card>
           </Col>
           <Col xs={24} sm={12} md={6}>
-            <Card>
+            <Card style={{height:'100%'}}>
               <Statistic
                 title="درآمد خالص"
                 value={financialSummary.netIncome}
@@ -482,7 +481,7 @@ const ManageTransactions = () => {
             </Card>
           </Col>
           <Col xs={24} sm={12} md={6}>
-            <Card>
+            <Card style={{height:'100%'}}>
               <Statistic
                 title="بازپرداخت‌های در انتظار"
                 value={financialSummary.pendingRefunds}
