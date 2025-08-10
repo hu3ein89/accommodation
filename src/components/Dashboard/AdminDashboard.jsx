@@ -49,8 +49,7 @@ const DashboardSider = styled(Sider)`
     z-index: 1000;
   }
 
-  /* --- 1. STYLE FOR THE STANDARD TRIGGER (Desktop View) --- */
-  /* This one appears at the bottom when collapsed width is > 0 */
+
   .ant-layout-sider-trigger {
     background: white; 
     color: black; 
@@ -62,19 +61,15 @@ const DashboardSider = styled(Sider)`
   .ant-layout-sider-trigger:hover {
     background: lightgray;
 
-  /* --- 2. STYLE FOR THE ZERO-WIDTH TRIGGER (Mobile View) --- */
-  /* This is the one you found! It sticks to the side when collapsed width is 0 */
   .ant-layout-sider-zero-width-trigger {
-    /* Position and size are handled by Ant Design, we just change the look */
-    background: #356da3; /* This is the background color you wanted */
-    color: #fff; /* Color of the > arrow icon */
+    background: #356da3;
+    color: #fff; 
     
-    /* I adjusted the border-radius for your Right-to-Left (RTL) layout */
     border-radius: 8px 0 0 8px; 
     
-    /* (Optional) Add a nice hover effect */
+
     &:hover {
-        background: #4a8dcf; /* A slightly lighter color on hover */
+        background: #4a8dcf;
     }
   }
 `;

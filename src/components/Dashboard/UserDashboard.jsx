@@ -34,10 +34,67 @@ import Navbar from '../Layout/Navbar'
 import '../../styles/UserDashboard.css'
 import FavoritesPage from "./Favorites";
 import { useReservations } from "../../context/ReservationContext";
+import styled from "styled-components";
 
 const { Header, Sider, Content } = Layout;
 const { Title, Text } = Typography;
 const { useToken } = theme;
+
+const DashboardLayout = styled(Layout)`
+  min-height: 100vh;
+  background: #f0f2f5;
+`;
+
+const DashboardSider = styled(Sider)`
+  &.ant-layout-sider {
+    box-shadow: 2px 0 8px rgba(0, 0, 0, 0.1);
+    background: #fff !important; 
+  }
+
+  &.ant-layout-sider-below {
+    position: fixed !important; 
+    top: 60px;
+    right: 0;
+    height: calc(100vh - 60px);
+    z-index: 1000;
+  }
+
+
+  .ant-layout-sider-trigger {
+    background: white; 
+    color: black; 
+    &:hover {
+      background: #002140; 
+    }
+  }
+
+  .ant-layout-sider-trigger:hover {
+    background: lightgray;
+
+  .ant-layout-sider-zero-width-trigger {
+    background: #356da3;
+    color: #fff; 
+    
+    border-radius: 8px 0 0 8px; 
+    
+
+    &:hover {
+        background: #4a8dcf;
+    }
+  }
+`;
+
+const Overlay = styled.div`
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.4);
+  z-index: 999; /* Positioned just below the Sider */
+`;
+
+
 
 const UserDashboard = () => {
   const { token } = useToken();
@@ -45,6 +102,7 @@ const UserDashboard = () => {
   const { user, logout } = useAuth();
   const [activeTab, setActiveTab] = useState("reservations");
   const [collapsed, setCollapsed] = useState(false);
+  const [isMobile, setIsMobile] = useState(false); 
   const [defaultHotel, setDefaultHotel] = useState(null); // State for the pre-selected hotel
   const queryClient = useQueryClient();
   const { pendingReservations } = useReservations();
@@ -157,14 +215,21 @@ const UserDashboard = () => {
   return (
     <Layout className="user-dashboard-container" dir="rtl">
       <Navbar />
-      <Sider
-        width={280}
-        theme="light"
-        collapsible
-        collapsed={collapsed}
-        onCollapse={(value) => setCollapsed(value)}
-        className="dashboard-sider"
-        breakpoint="lg"
+      {isMobile && !collapsed && <Overlay onClick={() => setCollapsed(true)} />}
+      <DashboardSider
+       width={260}
+       theme="light"
+       collapsible
+       collapsed={collapsed}
+       onCollapse={setCollapsed}
+       breakpoint="lg" 
+       collapsedWidth={isMobile ? 0 : 80} 
+       onBreakpoint={(broken) => {
+           setIsMobile(broken); 
+           if (broken) {
+              setCollapsed(true); 
+           }
+       }}
       >
         <div className="user-profile-header">
           <Space direction="vertical" size="middle" style={{ width: '100%', padding: '16px 0' }}>
@@ -244,7 +309,7 @@ const UserDashboard = () => {
             </Text>
           </div>
         )}
-      </Sider>
+      </DashboardSider>
 
       <Layout className="site-layout">
         {/* Corrected Header with only one custom class name */}
