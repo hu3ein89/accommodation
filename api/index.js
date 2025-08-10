@@ -3,7 +3,7 @@ import jsonServer from 'json-server';
 import path from 'path';
 import fs from 'fs';
 
-// 1. Create the full server instance again
+// 1. Create the full server instance
 const server = jsonServer.create();
 
 // 2. Read the database file
@@ -15,7 +15,7 @@ const router = jsonServer.router(data);
 const middlewares = jsonServer.defaults({ logger: false });
 server.use(middlewares);
 
-// 4. THE KEY FIX: Mount the router on the /api path.
+// 4. Mount the router on the /api path.
 // This tells the server that your routes are /api/hotels, /api/users, etc.
 // It will handle the URL pathing correctly.
 server.use('/api', router);

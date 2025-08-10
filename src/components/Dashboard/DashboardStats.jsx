@@ -166,18 +166,34 @@ export const DashboardStats = () => {
         <Card title="روند درآمد و رزروها" style={{ marginBottom: '24px' }}>
           <div style={{ height: '300px', minHeight: '300px' }}>
             <ResponsiveContainer width="100%" height="100%">
-              <LineChart data={monthlyData} margin={{ top: 20, right: 30, left: 20, bottom: 5 }}>
+              <LineChart data={monthlyData} margin={{ top: 20, right: 10, left: 10, bottom: 5 }} syncId="dashboardChart">
                 <CartesianGrid strokeDasharray="3 3" opacity={0.3} />
-                <XAxis dataKey="name" />
-                <YAxis yAxisId="left" />
-                <YAxis yAxisId="right" orientation="right" />
+                <XAxis dataKey="name"
+                tick={{ fontSize: 12 }}
+                interval={window.innerWidth < 768 ? 2 : 0}
+                />
+                <YAxis yAxisId="left" 
+                tick={{ fontSize: 12 }}
+                width={window.innerWidth < 768 ? 40 : 60}
+                />
+                <YAxis yAxisId="right" orientation="right"
+                tick={{ fontSize: 12 }}
+                width={window.innerWidth < 768 ? 40 : 60} />
                 <Tooltip 
                   formatter={(value, name) => [
                     name === 'revenue' ? `${value.toFixed(2)} میلیون تومان` : value,
                     name === 'revenue' ? 'درآمد' : 'رزروها'
                   ]}
+                  contentStyle={{
+                    fontSize: window.innerWidth < 768 ? 12 : 14,
+                    textAlign: 'right'
+                  }}
                 />
-                <Legend />
+                <Legend 
+                wrapperStyle={{
+                  paddingTop: window.innerWidth < 768 ? '10px' : '0'
+                }}
+                />
                 <Line
                   yAxisId="left"
                   type="monotone"
@@ -186,14 +202,16 @@ export const DashboardStats = () => {
                   stroke="#1890ff"
                   strokeWidth={2}
                   activeDot={{ r: 6 }}
+                  dot={window.innerWidth < 768 ? false : true}
                 />
                 <Line
-                  yAxisId="right"
-                  type="monotone"
-                  dataKey="revenue"
-                  name="درآمد (میلیون تومان)"
-                  stroke="#3f8600"
-                  strokeWidth={2}
+                 yAxisId="right"
+                 type="monotone"
+                 dataKey="revenue"
+                 name="درآمد (میلیون تومان)"
+                 stroke="#3f8600"
+                 strokeWidth={2}
+                 dot={window.innerWidth < 768 ? false : true}
                 />
               </LineChart>
             </ResponsiveContainer>

@@ -57,100 +57,96 @@ const ManageBookings = ({ limit, loading: externalLoading }) => {
     }
   });
 
-const updateStatusMutation = useMutation({
-  mutationFn: updateReservationStatus,
-  onSuccess: (updatedReservation) => {
-    queryClient.setQueryData(['reservations'], (old) => 
-      old.map(r => r.id === updatedReservation.id ? updatedReservation : r)
-    );
-    
-    // Only refetch transactions if status changed to cancelled
-    if (updatedReservation.status.booking === 'cancelled') {
-      queryClient.invalidateQueries({
-        queryKey: ['allTransactions'],
-        exact: true
+  const updateStatusMutation = useMutation({
+    mutationFn: updateReservationStatus,
+    onSuccess: (updatedReservation) => {
+      queryClient.setQueryData(['reservations'], (old) => 
+        old.map(r => r.id === updatedReservation.id ? updatedReservation : r)
+      );
+      
+      if (updatedReservation.status.booking === 'cancelled') {
+        queryClient.invalidateQueries({
+          queryKey: ['allTransactions'],
+          exact: true
+        });
+      }
+      
+      notification.success({ 
+        message: "موفقیت", 
+        description: "وضعیت رزرو با موفقیت به‌روزرسانی شد" 
+      });
+      setEditModal(false);
+    },
+    onError: (error) => {
+      notification.error({ 
+        message: "خطا", 
+        description: error.message || "خطا در به‌روزرسانی وضعیت" 
       });
     }
-    
-    notification.success({ 
-      message: "موفقیت", 
-      description: "وضعیت رزرو با موفقیت به‌روزرسانی شد" 
-    });
-    setEditModal(false);
-  },
-  onError: (error) => {
-    notification.error({ 
-      message: "خطا", 
-      description: error.message || "خطا در به‌روزرسانی وضعیت" 
-    });
-  }
-});
+  });
 
-const deleteBookingMutation = useMutation({
-  mutationFn: (id) => deleteReservation(id, false),
-  onSuccess: (response) => {
-    const deletedId = response.id;
-    
-    // Optimistically update the UI
-    queryClient.setQueryData(['reservations'], (old) => 
-      old.filter(r => r.id !== deletedId)
-    );
+  const deleteBookingMutation = useMutation({
+    mutationFn: (id) => deleteReservation(id, false),
+    onSuccess: (response) => {
+      const deletedId = response.id;
+      
+      queryClient.setQueryData(['reservations'], (old) => 
+        old.filter(r => r.id !== deletedId)
+      );
 
-    const reservation = reservations.find(r => r.id === deletedId);
-    if (reservation?.status?.booking === 'cancelled_refund_pending') {
-      createTransaction({
-        userId: reservation.userId,
-        reservationId: reservation.id,
-        type: 'refund_processed',
-        amount: -reservation.totalPrice,
-        status: 'completed',
-        description: `بازپرداخت پس از حذف رزرو #${reservation.id}`,
-      }).then(() => {
-        queryClient.invalidateQueries(['allTransactions']);
+      const reservation = reservations.find(r => r.id === deletedId);
+      if (reservation?.status?.booking === 'cancelled_refund_pending') {
+        createTransaction({
+          userId: reservation.userId,
+          reservationId: reservation.id,
+          type: 'refund_processed',
+          amount: -reservation.totalPrice,
+          status: 'completed',
+          description: `بازپرداخت پس از حذف رزرو #${reservation.id}`,
+        }).then(() => {
+          queryClient.invalidateQueries(['allTransactions']);
+        });
+      }
+
+      notification.success({
+        message: "موفقیت",
+        description: "رزرو با موفقیت حذف شد"
+      });
+    },
+    onError: (error) => {
+      notification.error({ 
+        message: "خطا", 
+        description: error.message || "خطا در لغو رزرو" 
       });
     }
+  });
 
-    notification.success({
-      message: "موفقیت",
-      description: "رزرو با موفقیت حذف شد"
-    });
-  },
-  onError: (error) => {
-    notification.error({ 
-      message: "خطا", 
-      description: error.message || "خطا در لغو رزرو" 
-    });
-  }
-});
-
-const handleUpdateStatus = async (values) => {
-  if (!selectedBooking?.id) {
-    notification.error({ message: "خطا", description: "شناسه رزرو نامعتبر است" });
-    return;
-  }
-
-  try {
-    const updatedReservation = await updateStatusMutation.mutateAsync({
-      id: selectedBooking.id,
-      status: values.status,
-    });
-
-    if (values.status === 'cancelled' && selectedBooking.userId) {
-      await createTransaction({
-        userId: selectedBooking.userId,
-        reservationId: selectedBooking.id,
-        type: 'refund_processed',
-        amount: -selectedBooking.totalPrice,
-        status: 'completed',
-        description: `استرداد وجه برای رزرو #${selectedBooking.id}`,
-      });
+  const handleUpdateStatus = async (values) => {
+    if (!selectedBooking?.id) {
+      notification.error({ message: "خطا", description: "شناسه رزرو نامعتبر است" });
+      return;
     }
 
-  } catch (error) {
-    console.error("خطا در به‌روزرسانی وضعیت:", error);
-  }
-};
+    try {
+      const updatedReservation = await updateStatusMutation.mutateAsync({
+        id: selectedBooking.id,
+        status: values.status,
+      });
 
+      if (values.status === 'cancelled' && selectedBooking.userId) {
+        await createTransaction({
+          userId: selectedBooking.userId,
+          reservationId: selectedBooking.id,
+          type: 'refund_processed',
+          amount: -selectedBooking.totalPrice,
+          status: 'completed',
+          description: `استرداد وجه برای رزرو #${selectedBooking.id}`,
+        });
+      }
+    } catch (error) {
+      console.error("خطا در به‌روزرسانی وضعیت:", error);
+    }
+  };
 
   const handleDeleteBooking = async (id) => {
     try {
@@ -171,19 +167,16 @@ const handleUpdateStatus = async (values) => {
         queryClient.invalidateQueries({ queryKey: ['allTransactions'] });
         notification.success({ message: 'تراکنش بازپرداخت پس از حذف ثبت شد.' });
       }
-
     } catch (error) {
       console.error('Error deleting reservation:', error);
     }
   };
-
 
   const refundPendingReservations = reservations.filter(
     r =>
       typeof r.status === 'object' &&
       r.status.booking === 'cancelled_refund_pending'
   );
-
 
   const handleRefresh = () => {
     queryClient.invalidateQueries(['reservations']);
@@ -203,16 +196,25 @@ const handleUpdateStatus = async (values) => {
       setExpandedKeys([...expandedKeys, id]);
     }
   };
+
   return (
-    <>
-      <div style={{ marginBottom: 16, display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-        <h2 style={{ margin: 0 }}>مدیریت رزروها</h2>
+    <div style={{ padding: '0 8px',maxWidth:'100%', overflowX:'hidden' }}>
+      <div style={{ marginBottom: 16, display: 'flex', justifyContent: 'space-between', alignItems: 'center',flexWrap: 'wrap' }}>
+      <h2 style={{ 
+          margin: 0, 
+          fontSize: 'clamp(16px, 4vw, 18px)',
+          whiteSpace: 'nowrap',
+          overflow: 'hidden',
+          textOverflow: 'ellipsis'
+        }}>مدیریت رزروها</h2>
         <Button
           icon={<ReloadOutlined />}
           onClick={handleRefresh}
           loading={reservationsLoading}
+          size="small"
+          style={{ marginTop: '4px' }}
         >
-          بارگذاری مجدد
+          <span className="responsive-text">بارگذاری مجدد</span>
         </Button>
       </div>
 
@@ -227,20 +229,39 @@ const handleUpdateStatus = async (values) => {
           {reservations.map(record => (
             <Card
               key={record.id}
-              title={`رزرو شماره: ${record.id}`}
-              extra={getStatusTag(record.status)}
-              style={{ width: '100%' }}
+              title={<span style={{ 
+                fontSize: 'clamp(10px, 2.5vw, 14px)',
+                display: 'inline-block',
+                width: '100%',
+                textAlign: 'center'
+              }}>
+                رزرو شماره: {record.id}
+              </span>}
+              extra={<div style={{ textAlign: 'center' }}>
+              {getStatusTag(record.status)}
+            </div>}
+              style={{ width: '100%',minWidth: '280px' }}
+              headStyle={{ 
+                padding: '0 8px',
+                textAlign: 'center'
+              }}
+              bodyStyle={{ 
+                padding: '12px 8px'
+              }}
               actions={[
                 <Button
                   type="text"
+                  size="small"
                   icon={expandedKeys.includes(record.id) ? <UpOutlined /> : <DownOutlined />}
                   onClick={() => toggleExpand(record.id)}
                 >
-                  
-                  {expandedKeys.includes(record.id) ? 'بستن جزئیات' : 'مشاهده جزئیات'}
+                  <span className="responsive-text">
+                    {expandedKeys.includes(record.id) ? 'بستن' : 'جزئیات'}
+                  </span>
                 </Button>,
                 <Button
                   type="text"
+                  size="small"
                   icon={<EditOutlined />}
                   onClick={() => {
                     setSelectedBooking(record);
@@ -248,7 +269,7 @@ const handleUpdateStatus = async (values) => {
                     setEditModal(true);
                   }}
                 >
-                  تغییر وضعیت
+                  <span className="responsive-text">تغییر</span>
                 </Button>,
                 <Popconfirm
                   title="آیا از حذف این رزرو اطمینان دارید؟"
@@ -259,44 +280,45 @@ const handleUpdateStatus = async (values) => {
                   <Button
                     type="text"
                     danger
+                    size="small"
                     icon={<DeleteOutlined />}
                     loading={deleteBookingMutation.isLoading && deleteBookingMutation.variables === record.id}
                   >
-                    حذف
+                    <span className="responsive-text">حذف</span>
                   </Button>
                 </Popconfirm>
               ]}
             >
-              <Row gutter={[16, 16]}>
+              <Row gutter={[8, 8]}>
                 <Col xs={24} sm={12} md={8}>
                   <div>
-                    <strong style={{ color: 'Highlight' }}>نام مهمان: </strong>
-                    <span>
+                    <strong style={{ color: 'Highlight', fontSize: '12px' }}>نام مهمان: </strong>
+                    <span style={{ fontSize: '12px' }}>
                       {record?.user?.firstName || 'نامشخص'} {record?.user?.lastName || ''}
                       {!record?.user?.firstName && !record?.user?.lastName && record.hotelName && record.hotelName}
                     </span>
                   </div>
                   <div>
-                    <strong style={{ color: 'violet' }}>هتل: </strong>
-                    <span>{record?.hotel?.name || record.hotelName || "نامشخص"}</span>
+                    <strong style={{ color: 'violet', fontSize: '12px' }}>هتل: </strong>
+                    <span style={{ fontSize: '12px' }}>{record?.hotel?.name || record.hotelName || "نامشخص"}</span>
                   </div>
                 </Col>
 
                 <Col xs={24} sm={12} md={8}>
                   <div>
-                    <strong style={{ color: 'springgreen' }}>تاریخ ورود: </strong>
-                    <span>{record.checkIn.replace(/-/g, '/') || "نامشخص"}</span>
+                    <strong style={{ color: 'springgreen', fontSize: '12px' }}>تاریخ ورود: </strong>
+                    <span style={{ fontSize: '12px' }}>{record.checkIn.replace(/-/g, '/') || "نامشخص"}</span>
                   </div>
                   <div>
-                    <strong style={{ color: 'red' }}>تاریخ خروج: </strong>
-                    <span>{record.checkOut?.replace(/-/g, '/') || 'نامشخص'}</span>
+                    <strong style={{ color: 'red', fontSize: '12px' }}>تاریخ خروج: </strong>
+                    <span style={{ fontSize: '12px' }}>{record.checkOut?.replace(/-/g, '/') || 'نامشخص'}</span>
                   </div>
                 </Col>
 
                 <Col xs={24} sm={12} md={8}>
                   <div>
-                    <strong style={{ color: 'yellowgreen' }}>مبلغ: </strong>
-                    <span>
+                    <strong style={{ color: 'yellowgreen', fontSize: '12px' }}>مبلغ: </strong>
+                    <span style={{ fontSize: '12px' }}>
                       {((record.totalPrice || 0)).toLocaleString('fa-IR')} تومان
                     </span>
                   </div>
@@ -305,21 +327,21 @@ const handleUpdateStatus = async (values) => {
 
               {expandedKeys.includes(record.id) && (
                 <>
-                  <Divider />
-                  <Row gutter={[16, 16]}>
-                    <Col xs={24} sm={12} md={8}>
-                      <Card size="small" title="اطلاعات رزرو">
-                        <p>تعداد بزرگسال: {record.guests?.adults || 1}</p>
-                        <p>تعداد کودک: {record.guests?.children || 0}</p>
-                        <p>تاریخ ثبت: {(record.checkIn)?.replace(/-/g, '/') || "نامشخص"}</p>
+                  <Divider style={{ margin: '12px 0' }} />
+                  <Row gutter={[8, 8]}>
+                    <Col xs={24} sm={12} md={12}>
+                      <Card size="small" title="اطلاعات رزرو" headStyle={{ fontSize: '12px' }} bodyStyle={{ padding: '8px' }}>
+                        <p style={{ marginBottom: '8px', fontSize: '12px' }}>تعداد بزرگسال: {record.guests?.adults || 1}</p>
+                        <p style={{ marginBottom: '8px', fontSize: '12px' }}>تعداد کودک: {record.guests?.children || 0}</p>
+                        <p style={{ marginBottom: '0', fontSize: '12px' }}>تاریخ ثبت: {(record.checkIn)?.replace(/-/g, '/') || "نامشخص"}</p>
                       </Card>
                     </Col>
 
-                    <Col xs={24} sm={12} md={8}>
-                      <Card size="small" title="اطلاعات مهمان">
-                        <p>نام: {record.user?.firstName || 'نامشخص'} {record.user?.lastName || ''}</p>
-                        <p>ایمیل: {record.user?.email || "نامشخص"}</p>
-                        <p>تلفن: {record.user?.phoneNumber || "نامشخص"}</p>
+                    <Col xs={24} sm={12} md={12}>
+                      <Card size="small" title="اطلاعات مهمان" headStyle={{ fontSize: '12px' }} bodyStyle={{ padding: '8px' }}>
+                        <p style={{ marginBottom: '8px', fontSize: '12px' }}>نام: {record.user?.firstName || 'نامشخص'} {record.user?.lastName || ''}</p>
+                        <p style={{ marginBottom: '8px', fontSize: '12px' }}>ایمیل: {record.user?.email || "نامشخص"}</p>
+                        <p style={{ marginBottom: '0', fontSize: '12px' }}>تلفن: {record.user?.phoneNumber || "نامشخص"}</p>
                       </Card>
                     </Col>
                   </Row>
@@ -338,6 +360,7 @@ const handleUpdateStatus = async (values) => {
           form.resetFields();
         }}
         footer={null}
+        width={window.innerWidth < 768 ? '90%' : '50%'}
       >
         <Form
           form={form}
@@ -352,12 +375,12 @@ const handleUpdateStatus = async (values) => {
             label="وضعیت"
             rules={[{ required: true, message: "لطفاً وضعیت را انتخاب کنید" }]}
           >
-            <Select>
+            <Select size="large">
               <Option value="confirmed">تایید شده</Option>
               <Option value="pending">در انتظار</Option>
               <Option value="cancelled">لغو شده</Option>
               <Option value="cancelled_refund_pending">در انتظار بازپرداخت</Option>
-              <Option value="refund_processed">  بازپرداخت شده</Option>
+              <Option value="refund_processed">بازپرداخت شده</Option>
             </Select>
           </Form.Item>
 
@@ -368,6 +391,7 @@ const handleUpdateStatus = async (values) => {
                   setEditModal(false);
                   form.resetFields();
                 }}
+                size={window.innerWidth < 768 ? 'middle' : 'large'}
               >
                 انصراف
               </Button>
@@ -375,6 +399,7 @@ const handleUpdateStatus = async (values) => {
                 type="primary"
                 htmlType="submit"
                 loading={updateStatusMutation.isLoading}
+                size={window.innerWidth < 768 ? 'middle' : 'large'}
               >
                 ثبت تغییرات
               </Button>
@@ -382,7 +407,21 @@ const handleUpdateStatus = async (values) => {
           </Form.Item>
         </Form>
       </Modal>
-    </>
+
+      <style jsx global>{`
+        @media (max-width: 768px) {
+          .responsive-text {
+            display: none;
+          }
+          .ant-card-actions > li {
+            margin: 4px 0 !important;
+          }
+          .ant-card-head-title {
+            padding: 8px 0;
+          }
+        }
+      `}</style>
+    </div>
   );
 };
 

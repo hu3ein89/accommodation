@@ -31,7 +31,6 @@
     "jalaliday": "^2.3.0",
     "json-server": "^0.17.4",
     "lodash": "^4.17.21",
-    "nodemon": "^3.1.10",
     "react": "19.1.0",
     "react-credit-cards-2": "^1.0.3",
     "react-dom": "19.1.0",

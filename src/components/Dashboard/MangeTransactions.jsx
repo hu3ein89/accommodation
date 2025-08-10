@@ -409,7 +409,12 @@ const ManageTransactions = () => {
       <JalaliLocaleListener />
       <Card
         title={
-          <Space>
+          <Space 
+          style={{ 
+            margin: 0,
+            display: screens.md ? 'block' : 'none', 
+            textAlign: 'center' 
+          }}>
             <DollarOutlined />
             <span>مدیریت تراکنش‌ها</span>
             {isRefetching && <Spin indicator={<RedoOutlined spin />} />}
@@ -429,8 +434,7 @@ const ManageTransactions = () => {
               onClick={handleExport}
               disabled={filteredTransactions.length === 0}
             >
-              خروجی اکسل
-            </Button>
+خروجی            </Button>
           </Space>
         }
       >
